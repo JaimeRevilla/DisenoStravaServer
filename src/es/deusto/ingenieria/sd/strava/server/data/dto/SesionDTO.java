@@ -1,25 +1,28 @@
-package DTO;
+package es.deusto.ingenieria.sd.strava.server.data.dto;
+
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SesionDto implements Serializable{
-	//This attribute is needed to implement the "Serializable" interface.
+public class SesionDTO implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private String titulo;
 	private String deporte;
 	private double km;
 	private String fInicio;
-	private int hora;
+	private int tiempo;
 	private double duracion;
-	private static final String[] TIPOS = {"Running", "Ciclismo"};
+	private TipoDeporte tipoDeporte;
+	
 	
 	public static List<String> getTipoDeporte() {
-		List<String> tipoDeporte = new ArrayList<>();
-		for(String s: TIPOS) {
-			tipoDeporte.add(s);
+		List<String> tDep = new ArrayList<>();
+		for (TipoDeporte t : TipoDeporte.values()) {
+			tDep.add(t.toString());
+			
 		}
-		return tipoDeporte;
+		return tDep;
 	}
 
 	public String getTitulo() {
@@ -54,12 +57,14 @@ public class SesionDto implements Serializable{
 		this.fInicio = fInicio;
 	}
 
-	public int getHora() {
-		return hora;
+	
+
+	public int getTiempo() {
+		return tiempo;
 	}
 
-	public void setHora(int hora) {
-		this.hora = hora;
+	public void setTiempo(int tiempo) {
+		this.tiempo = tiempo;
 	}
 
 	public double getDuracion() {
@@ -80,7 +85,7 @@ public class SesionDto implements Serializable{
 		result.append("km - Session begin: ");
 		result.append(this.fInicio);
 		result.append(" - Start time: ");
-		result.append(this.hora);
+		result.append(this.tiempo);
 		result.append(" - Tot. Time: ");
 		result.append(this.duracion);
 		result.append(" minutes");
@@ -88,3 +93,6 @@ public class SesionDto implements Serializable{
 		return result.toString();
 	}
 }
+
+
+

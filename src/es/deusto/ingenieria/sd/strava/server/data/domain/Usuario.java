@@ -1,54 +1,65 @@
-package DTO;
-
-import java.io.Serializable;
+package es.deusto.ingenieria.sd.strava.server.data.domain;
 
 import java.util.ArrayList;
 import java.util.List;
 
-//import es.deusto.ingenieria.sd.auctions.server.data.domain.Reto;
-//import es.deusto.ingenieria.sd.auctions.server.data.domain.Sesion;
-
-//import es.deusto.ingenieria.sd.auctions.server.data.domain.User;
-
-//This class implements DTO pattern
-public class UserDto implements Serializable {	
-	//This attribute is needed to implement the "Serializable" interface.
-	private String nickname;
-	private String password;
-	private String email;
+public class Usuario {	
+	private String nombre;
+	private String contr;
+	private String mail;
 	private String fNac;
 	private double peso;
 	private int altura;
 	private double fCardiacaMaxima;
 	private double fCardiacaReposo;
-	private int estado;
+	private String log;
 	private List<Reto> retos = new ArrayList<>();
+	private List<Reto> retosAct = new ArrayList<>();
 	private List<Sesion> sesiones = new ArrayList<>();
+	
+	
+	
+	public Usuario(String nombre, String contr, String mail, String fNac, double peso, 
+			int alt, double fCardMax, double fCardRep, String log) {
+		this.nombre = nombre;
+		this.contr = contr;
+		this.mail = mail;
+		this.fNac = fNac;
+		this.peso = peso;
+		this.altura = alt;
+		this.fCardiacaMaxima = fCardMax;
+		this.fCardiacaReposo = fCardRep;
+		this.log = log;
+		this.retos = new ArrayList<>();
+		this.sesiones = new ArrayList<>();
+	}
 		
-	public String getNickname() {
-		return nickname;
-	}
 	
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
-	}
 	
-	public boolean checkPassword(String password) {
-		return this.password.equals(password);
+	public String getNombre() {
+		return nombre;
 	}
-	
-	public void setPassword(String password) {
-		this.password = password;
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
-	
-	public String getEmail() {
-		return email;
+
+	public String getContr() {
+		return contr;
 	}
-	
-	public void setEmail(String email) {
-		this.email = email;
+
+	public void setContr(String contr) {
+		this.contr = contr;
 	}
-	
+
+	public String getMail() {
+		return mail;
+	}
+
+	public void setMail(String mail) {
+		this.mail = mail;
+	}
+
 	public String getfNac() {
 		return fNac;
 	}
@@ -89,20 +100,20 @@ public class UserDto implements Serializable {
 		this.fCardiacaReposo = fCardiacaReposo;
 	}
 
-	public int getEstado() {
-		return estado;
-	}
-
-	public void setEstado(int estado) {
-		this.estado = estado;
-	}
-
 	public List<Reto> getRetos() {
 		return retos;
 	}
 
 	public void setRetos(List<Reto> retos) {
 		this.retos = retos;
+	}
+	
+	public List<Reto> getRetosAct() {
+		return retosAct;
+	}
+	
+	public void setRetosAct(List<Reto> retosAct) {
+		this.retosAct = retosAct;
 	}
 
 	public List<Sesion> getSesiones() {
@@ -129,11 +140,11 @@ public class UserDto implements Serializable {
 	public String toString() {
 		StringBuffer result = new StringBuffer();
 		
-		result.append(this.nickname);
+		result.append(this.nombre);
 		result.append(" - ");
-		result.append(this.email);
+		result.append(this.mail);
 		result.append(" - (");
-		result.append(this.retos.size());
+		result.append(this.retosAct.size());
 		result.append(" retos) - (");
 		result.append(this.sesiones.size());
 		result.append(" sesiones)");
@@ -144,7 +155,7 @@ public class UserDto implements Serializable {
 	@Override
 	public boolean equals(Object obj) {
 		if (this.getClass().getName().equals(obj.getClass().getName())) {
-			return this.email.equals(((UserDTO)obj).email);
+			return this.mail.equals(((Usuario)obj).mail);
 		}
 		
 		return false;

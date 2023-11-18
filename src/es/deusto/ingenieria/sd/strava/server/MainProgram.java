@@ -1,10 +1,10 @@
-package main;
+package es.deusto.ingenieria.sd.strava.server;
 import java.rmi.Naming;
 
-//import es.deusto.ingenieria.sd.strava.server.remote.IRemoteFacade;
-//import es.deusto.ingenieria.sd.strava.server.remote.RemoteFacade;
+import es.deusto.ingenieria.sd.strava.server.remote.IRemoteFacade;
+import es.deusto.ingenieria.sd.strava.server.remote.RemoteFacade;
 
-public class Main {
+public class MainProgram {
 
 	public static void main(String[] args) {	
 		//Activate Security Manager. It is needed for RMI.
@@ -19,8 +19,8 @@ public class Main {
 		
 		//Bind remote facade instance to a sirvice name using RMIRegistry
 		try {
-//			IRemoteFacade remoteFacade = new RemoteFacade();			
-//			Naming.rebind(name, remoteFacade);
+			IRemoteFacade remoteFacade = new RemoteFacade();			
+			Naming.rebind(name, remoteFacade);
 			System.out.println(" *strava server '" + name + "' started!!");
 		} catch (Exception ex) {
 			System.err.println(" # strava Server Exception: " + ex.getMessage());
