@@ -15,11 +15,10 @@ import es.deusto.ingenieria.sd.strava.server.data.dto.RetoAssembler;
 import es.deusto.ingenieria.sd.strava.server.data.dto.RetoDTO;
 import es.deusto.ingenieria.sd.strava.server.data.dto.SesionAssembler;
 import es.deusto.ingenieria.sd.strava.server.data.dto.SesionDTO;
+import es.deusto.ingenieria.sd.strava.server.data.dto.TipoProveedor;
 import es.deusto.ingenieria.sd.strava.server.service.LoginAppService;
 import es.deusto.ingenieria.sd.strava.server.service.RetoAppService;
 import es.deusto.ingenieria.sd.strava.server.service.SesionAppService;
-
-
 
 
 public class RemoteFacade extends UnicastRemoteObject implements IRemoteFacade {	
@@ -61,10 +60,10 @@ public class RemoteFacade extends UnicastRemoteObject implements IRemoteFacade {
 	
 	@Override
 	public synchronized void signup(String nombre, String contr, String mail, String fNac, 
-            double peso, int altura, double fCardiacaMaxima, double fCardiacaReposo, String log) throws RemoteException{
+            double peso, int altura, double fCardiacaMaxima, double fCardiacaReposo, String log, TipoProveedor tipoProvedor) throws RemoteException{
 		System.out.println(" * RemoteFacade signup(): " + nombre + " / " + contr);
 		
-		Usuario usuario = new Usuario(nombre, contr, mail, fNac, peso, altura, fCardiacaMaxima, fCardiacaReposo, log);
+		Usuario usuario = new Usuario(nombre, contr, mail, fNac, peso, altura, fCardiacaMaxima, fCardiacaReposo, log,tipoProvedor);
 		
 		
 		if (!loginService.signup(usuario)) {
@@ -163,5 +162,79 @@ public class RemoteFacade extends UnicastRemoteObject implements IRemoteFacade {
 	
 	
 	
-
+	
+	
+//	@Override
+//	public List<CategoryDTO> getCategories() throws RemoteException {
+//		System.out.println(" * RemoteFacade getCategories()");
+//		
+//		//Get Categories using BidAppService
+//		List<Category> categories = bidService.getCategories();
+//		
+//		if (categories != null) {
+//			//Convert domain object to DTO
+//			return CategoryAssembler.getInstance().categoryToDTO(categories);
+//		} else {
+//			throw new RemoteException("getCategories() fails!");
+//		}
+//	}
+//
+//	@Override
+//	public List<ArticleDTO> getArticles(String category) throws RemoteException {
+//		System.out.println(" * RemoteFacade getArticle('" + category + "')");
+//
+//		//Get Articles using BidAppService
+//		List<Article> articles = bidService.getArticles(category);
+//		
+//		if (articles != null) {
+//			//Convert domain object to DTO
+//			return ArticleAssembler.getInstance().articleToDTO(articles);
+//		} else {
+//			throw new RemoteException("getArticles() fails!");
+//		}
+//	}
+//	
+//	@Override
+//	public boolean makeBid(long token, int article, float amount) throws RemoteException {		
+//		System.out.println(" * RemoteFacade makeBid article : " + article + " / amount " + amount);
+//		
+//		if (this.serverState.containsKey(token)) {						
+//			//Make the bid using Bid Application Service
+//			if (bidService.makeBid(this.serverState.get(token), article, amount)) {
+//				return true;
+//			} else {
+//				throw new RemoteException("makeBid() fails!");
+//			}
+//		} else {
+//			throw new RemoteException("To place a bid you must first log in");
+//		}
+//	}
+//
+//	@Override
+//	public float getUSDRate() throws RemoteException {
+//		System.out.println(" * RemoteFacade get USD rate");
+//
+//		//Get rate using BidAppService
+//		float rate = bidService.getUSDRate();
+//		
+//		if (rate != -1) {
+//			return rate;
+//		} else {
+//			throw new RemoteException("getUSDRate() fails!");
+//		}
+//	}
+//
+//	@Override
+//	public float getGBPRate() throws RemoteException {
+//		System.out.println(" * RemoteFacade get GBP rate");
+//		
+//		//Get rate using BidAppService
+//		float rate = bidService.getGBPRate();
+//		
+//		if (rate != -1) {
+//			return rate;
+//		} else {
+//			throw new RemoteException("getGBPRate() fails!");
+//		}
+//	}
 }

@@ -3,6 +3,8 @@ package es.deusto.ingenieria.sd.strava.server.data.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.deusto.ingenieria.sd.strava.server.data.dto.TipoProveedor;
+
 public class Usuario {	
 	private String nombre;
 	private String contr;
@@ -13,6 +15,7 @@ public class Usuario {
 	private double fCardiacaMaxima;
 	private double fCardiacaReposo;
 	private String log;
+	private TipoProveedor tipoProveedor;
 	private List<Reto> retos = new ArrayList<>();
 	private List<Reto> retosAct = new ArrayList<>();
 	private List<Sesion> sesiones = new ArrayList<>();
@@ -20,7 +23,7 @@ public class Usuario {
 	
 	
 	public Usuario(String nombre, String contr, String mail, String fNac, double peso, 
-			int alt, double fCardMax, double fCardRep, String log) {
+			int alt, double fCardMax, double fCardRep, String log, TipoProveedor tipoProveedor) {
 		this.nombre = nombre;
 		this.contr = contr;
 		this.mail = mail;
@@ -30,6 +33,7 @@ public class Usuario {
 		this.fCardiacaMaxima = fCardMax;
 		this.fCardiacaReposo = fCardRep;
 		this.log = log;
+		this.tipoProveedor = tipoProveedor;
 		this.retos = new ArrayList<>();
 		this.sesiones = new ArrayList<>();
 	}
@@ -122,6 +126,15 @@ public class Usuario {
 
 	public void setSesiones(List<Sesion> sesiones) {
 		this.sesiones = sesiones;
+	}
+	public TipoProveedor getTipoProveedor() {
+		return tipoProveedor;
+	}
+
+
+
+	public void setTipoProveedor(TipoProveedor tipoProveedor) {
+		this.tipoProveedor = tipoProveedor;
 	}
 
 	public void addSesion(Sesion sesion) {

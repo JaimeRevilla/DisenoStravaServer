@@ -9,10 +9,6 @@ import java.util.List;
 import es.deusto.ingenieria.sd.strava.server.data.domain.Reto;
 import es.deusto.ingenieria.sd.strava.server.data.domain.Sesion;
 
-
-
-	
-
 	//This class implements DTO pattern
 public class UsuarioDTO implements Serializable {	
 	private static final long serialVersionUID = 1L;

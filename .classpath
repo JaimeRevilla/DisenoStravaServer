@@ -8,5 +8,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/commons-codec-1.15.jar"/>
 	<classpathentry kind="lib" path="dist/eAuctions.jar"/>
+	<classpathentry kind="lib" path="lib/CurrencyExchange.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
