@@ -18,7 +18,7 @@ public class Factory {
 	
 	public IGateWay createGateWay(TipoProveedor t) {
 		if(t.equals(TipoProveedor.GOOGLE)) {
-			return GateWayGoogle.getGateWay();
+			return (IGateWay) GateWayGoogle.getGateWay();
 		}else if(t.equals(TipoProveedor.FACEBOOK)){
 			return GateWayFacebook.getGateWay();
 		}else {

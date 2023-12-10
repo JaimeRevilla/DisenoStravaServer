@@ -1,25 +1,17 @@
 package es.deusto.ingeniaria.sd.strava.gateway;
 
-import java.rmi.Naming;
-import java.rmi.RemoteException;
+import org.springframework.web.client.RestTemplate;
 
-import es.deusto.ingenieria.sd.strava.remote.IGoogleServer;
-
-public class GateWayGoogle implements IGateWay{
+public class GateWayGoogle {
 	private static GateWayGoogle gateWay;
-	
-	private IGoogleServer googleServer;
-	
+	private RestTemplate restTemplate = new RestTemplate();
+	private String serverURL = "http://127.0.0.1";
+	private int serverPort = 8002;
 	
 	private GateWayGoogle() {
-		try {
-			String url = "//127.0.0.1:1099/GoogleServer";//CUIDADO!!
-			this.googleServer = (IGoogleServer) Naming.lookup(url); 
-		} catch (Exception e) {
-			System.err.println("Error : " + e);
-		}
+		
 	}
-
+	
 	public static GateWayGoogle getGateWay() {
 		if(gateWay == null) {
 			gateWay = new GateWayGoogle();
@@ -27,15 +19,28 @@ public class GateWayGoogle implements IGateWay{
 		return gateWay;
 	}
 	
-	@Override
-	public boolean login(String mail, String contr) throws RemoteException {
-		System.out.println("   - LogIn from Google Servers");
-
+	public boolean login(String email, String contrasena) {				
 		try {
-			return this.googleServer.login(mail, contr);
-		} catch(Exception e) {
-			System.out.println(" $ Error LogIn with Google: " + e);
+			System.out.format("login(): %s:%d/strava/login ...", serverURL, serverPort);
+			
+			String message = email + "#" + contrasena;
+
+			return restTemplate.postForObject(String.format("%s:%d/strava/login", serverURL, serverPort), message, Boolean.class);
+			
+		} catch (Exception ex) {
+			System.out.println("   # Error en login(): " + ex.getMessage());
 			return false;
 		}
+	}
+	
+	public boolean comprobarUsuario(String email) {		
+		boolean result = false;
+		
+		try {
+			result = restTemplate.postForObject(String.format("%s:%d/strava/comprobarUsuario", serverURL, serverPort), email, Boolean.class);
+		} catch (Exception ex) {
+			System.out.println("   # Error en comprobarUsuario(): " + ex.getMessage());
+		}		
+		return result;
 	}
 }
