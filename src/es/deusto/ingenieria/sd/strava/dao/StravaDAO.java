@@ -3,12 +3,13 @@ package es.deusto.ingenieria.sd.strava.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.jdo.Extent;
-import javax.jdo.JDOHelper;
-import javax.jdo.PersistenceManager;
-import javax.jdo.PersistenceManagerFactory;
-import javax.jdo.Query;
-import javax.jdo.Transaction;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import es.deusto.ingenieria.sd.strava.server.data.domain.Reto;
 import es.deusto.ingenieria.sd.strava.server.data.domain.Sesion;
@@ -16,11 +17,12 @@ import es.deusto.ingenieria.sd.strava.server.data.domain.Usuario;
 
 public class StravaDAO implements IStravaDAO{
 	
-	private PersistenceManagerFactory pmf;
+	private EntityManagerFactory emf;
 	private static StravaDAO instance;
+	
 
 	public StravaDAO() {
-		pmf = JDOHelper.getPersistenceManagerFactory("datanucleus.properties");
+		 emf = Persistence.createEntityManagerFactory("Persistencia");
 	}
 
 	
@@ -32,13 +34,11 @@ public class StravaDAO implements IStravaDAO{
 	}
 	@Override
 	public void storeUsuario(Usuario usuario) {
-	PersistenceManager pm = pmf.getPersistenceManager();
-	Transaction tx = pm.currentTransaction();
-
+	EntityManager em = emf.createEntityManager();
+	EntityTransaction tx = em.getTransaction();
 	try {
 		tx.begin();
 		System.out.println("   * Storing an usuario: " + usuario);
-		pm.makePersistent(usuario);
 		tx.commit();
 	} catch (Exception ex) {
 		System.out.println("   $ Error storing an usuario: " + ex.getMessage());
@@ -47,7 +47,7 @@ public class StravaDAO implements IStravaDAO{
 			tx.rollback();
 		}
 
-		pm.close();
+		em.close();
 	}
 		
 	}
@@ -55,19 +55,16 @@ public class StravaDAO implements IStravaDAO{
 
 	@Override
 	public Usuario getUsuario(String mail, String password) {
-		PersistenceManager pm = pmf.getPersistenceManager();
-		pm.getFetchPlan().setMaxFetchDepth(3);
-
-		Transaction tx = pm.currentTransaction();
+		EntityManager em = emf.createEntityManager();
+		EntityTransaction tx = em.getTransaction();
 		Usuario usuario = null;
 
 		try {
 			System.out.println("   * Querying a usuario: " + mail);
 
 			tx.begin();
-			Query<?> query = pm.newQuery("SELECT FROM " + Usuario.class.getName() + " WHERE email == '" + mail + "' and password == '" + password + "'");
-			query.setUnique(true);
-			usuario = (Usuario) query.execute();
+			Query q = em.createQuery("SELECT FROM " + Usuario.class.getName() + " WHERE email == '" + mail + "' and password == '" + password + "'");
+			usuario = (Usuario) q.getSingleResult();
 			tx.commit();
 
 		} catch (Exception ex) {
@@ -78,26 +75,24 @@ public class StravaDAO implements IStravaDAO{
 				tx.rollback();
 			}
 
-			pm.close();
+			em.close();
 		}
 		return usuario;
 	}
 
 	@Override
 	public Usuario getUsuario(String mail) {
-		PersistenceManager pm = pmf.getPersistenceManager();
-		pm.getFetchPlan().setMaxFetchDepth(3);
+		EntityManager em = emf.createEntityManager();
 
-		Transaction tx = pm.currentTransaction();
+		EntityTransaction tx = em.getTransaction();
 		Usuario usuario = null;
 
 		try {
 			System.out.println("   * Querying a usuario: " + mail);
 
 			tx.begin();
-			Query<?> query = pm.newQuery("SELECT FROM " + Usuario.class.getName() + " WHERE email == '" + mail + "'");
-			query.setUnique(true);
-			usuario = (Usuario) query.execute();
+			Query q = em.createQuery("SELECT FROM " + Usuario.class.getName() + " WHERE email == '" + mail + "'");
+			usuario = (Usuario) q.getSingleResult();
 			tx.commit();
 
 		} catch (Exception ex) {
@@ -108,19 +103,18 @@ public class StravaDAO implements IStravaDAO{
 				tx.rollback();
 			}
 
-			pm.close();
+			em.close();
 		}
 		return usuario;
 	}
 
 	@Override
 	public void updateUsuario(Usuario usuario) {
-		PersistenceManager pm = pmf.getPersistenceManager();
-		Transaction tx = pm.currentTransaction();
+		EntityManager em = emf.createEntityManager();
+		EntityTransaction tx = em.getTransaction();
 
 		try {
 			tx.begin();
-			pm.makePersistent(usuario);
 			tx.commit();
 		} catch (Exception ex) {
 			System.out.println("   $ Error retreiving an extent: " + ex.getMessage());
@@ -129,30 +123,28 @@ public class StravaDAO implements IStravaDAO{
 				tx.rollback();
 			}
 
-			pm.close();
+			em.close();
 		}
 		
 	}
 
 	@Override
 	public List<Reto> getRetos(Usuario usuario) {
-		PersistenceManager pm = pmf.getPersistenceManager();
+		EntityManager em = emf.createEntityManager();
 		/*
 		 * By default only 1 level is retrieved from the db so if we wish to fetch more
 		 * than one level, we must indicate it
 		 */
-		pm.getFetchPlan().setMaxFetchDepth(3);
 
-		Transaction tx = pm.currentTransaction();
+		EntityTransaction tx = em.getTransaction();
 		List<Reto> retos = new ArrayList<>();
 
 		try {
 			System.out.println("   * Querying Reto List from: " + usuario.getMail());
 
 			tx.begin();
-			Query<?> query = pm.newQuery("SELECT retos FROM " + Usuario.class.getName() + " WHERE email == '" + usuario.getMail() + "'");
-			query.setUnique(true);
-			retos = (List<Reto>) query.execute();
+			Query q = em.createQuery("SELECT retos FROM " + Usuario.class.getName() + " WHERE email == '" + usuario.getMail() + "'");
+			retos = (List<Reto>) q.getResultList();
 			tx.commit();
 
 		} catch (Exception ex) {
@@ -163,30 +155,28 @@ public class StravaDAO implements IStravaDAO{
 				tx.rollback();
 			}
 
-			pm.close();
+			em.close();
 		}
 		return retos;
 	}
 
 	@Override
 	public List<Sesion> getSesiones(Usuario usuario) {
-		PersistenceManager pm = pmf.getPersistenceManager();
+		EntityManager em = emf.createEntityManager();
 		/*
 		 * By default only 1 level is retrieved from the db so if we wish to fetch more
 		 * than one level, we must indicate it
 		 */
-		pm.getFetchPlan().setMaxFetchDepth(3);
 
-		Transaction tx = pm.currentTransaction();
+		EntityTransaction tx = em.getTransaction();
 		List<Sesion> sesiones = new ArrayList<>();
 
 		try {
 			System.out.println("   * Querying Reto List from: " + usuario.getMail());
 
 			tx.begin();
-			Query<?> query = pm.newQuery("SELECT retos FROM " + Usuario.class.getName() + " WHERE email == '" + usuario.getMail() + "'");
-			query.setUnique(true);
-			sesiones = (List<Sesion>) query.execute();
+			Query q = em.createQuery("SELECT retos FROM " + Usuario.class.getName() + " WHERE email == '" + usuario.getMail() + "'");
+			sesiones = (List<Sesion>) q.getResultList();
 			tx.commit();
 
 		} catch (Exception ex) {
@@ -197,30 +187,28 @@ public class StravaDAO implements IStravaDAO{
 				tx.rollback();
 			}
 
-			pm.close();
+			em.close();
 		}
 		return sesiones;
 	}
 
 	@Override
 	public List<Reto> getRetosActivos(Usuario usuario) {
-		PersistenceManager pm = pmf.getPersistenceManager();
+		EntityManager em = emf.createEntityManager();
 		/*
 		 * By default only 1 level is retrieved from the db so if we wish to fetch more
 		 * than one level, we must indicate it
 		 */
-		pm.getFetchPlan().setMaxFetchDepth(3);
 
-		Transaction tx = pm.currentTransaction();
+		EntityTransaction tx = em.getTransaction();
 		List<Reto> retosA = new ArrayList<>();
 
 		try {
 			System.out.println("   * Querying Reto List from: " + usuario.getMail());
 
 			tx.begin();
-			Query<?> query = pm.newQuery("SELECT retos FROM " + Usuario.class.getName() + " WHERE email == '" + usuario.getMail() + "'");
-			query.setUnique(true);
-			retosA = (List<Reto>) query.execute();
+			Query q = em.createQuery("SELECT retos FROM " + Usuario.class.getName() + " WHERE email == '" + usuario.getMail() + "'");
+			retosA = (List<Reto>) q.getResultList();
 			tx.commit();
 
 		} catch (Exception ex) {
@@ -231,7 +219,7 @@ public class StravaDAO implements IStravaDAO{
 				tx.rollback();
 			}
 
-			pm.close();
+			em.close();
 		}
 		return retosA;
 	}
@@ -239,15 +227,17 @@ public class StravaDAO implements IStravaDAO{
 	@Override
 	public void deleteAllUsuarios() {
 		System.out.println("- Cleaning the DB...");
-		PersistenceManager pm = pmf.getPersistenceManager();
-		Transaction tx = pm.currentTransaction();
+		EntityManager em = emf.createEntityManager();
+		EntityTransaction tx = em.getTransaction();
 		try {
 			tx.begin();
 			
-			Extent<Usuario> uExtent = pm.getExtent(Usuario.class);
-			for(Usuario usuario: uExtent) {
+			String jpql = "SELECT u FROM Usuario u";
+			TypedQuery<Usuario> query = em.createQuery(jpql, Usuario.class);
+			List<Usuario> usuarios = query.getResultList();			
+			for(Usuario usuario: usuarios) {
 				System.out.println("- Deleted User from DB: " + usuario.getMail());
-				pm.deletePersistent(usuario);
+				em.remove(usuario);
 			}
 			
 			tx.commit();
@@ -259,8 +249,8 @@ public class StravaDAO implements IStravaDAO{
 				tx.rollback();
 			}
 
-			if (pm != null && !pm.isClosed()) {
-				pm.close();
+			if (em != null) {
+				em.close();
 			}
 		}
 		

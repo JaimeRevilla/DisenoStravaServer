@@ -2,7 +2,9 @@ package es.deusto.ingenieria.sd.strava.server.data.domain;
 
 import java.util.Objects;
 
+import javax.persistence.Entity;
 
+@Entity
 public class Reto {
 	private String nombre;
 	private String fIni;

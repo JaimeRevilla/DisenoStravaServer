@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
+        version="2.2">
+        
+    <persistence-unit name="Persistencia">
+        <class>es.deusto.ingenieria.sd.strava.server.data.domain.Reto</class>
+        <class>es.deusto.ingenieria.sd.strava.server.data.domain.Sesion</class>
+        <class>es.deusto.ingenieria.sd.strava.server.data.domain.Usuario</class>
+        <exclude-unlisted-classes/>
+
+		<properties>
+			<property name="datanucleus.schema.autoCreateAll" value="true"/>
+
+	        <!-- ENABLE THESE FOR EXCEL -->
+	        <!-- <property name="javax.persistence.jdbc.url" value="excel:file:resources/Peristencia.xls"/> -->		
+	
+			<!-- ENABLE THESE FOR MYSQL -->     
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://127.0.0.1:3306/productsDB?verifyServerCertificate=false&amp;useSSL=false&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true"/>
+            <property name="javax.persistence.jdbc.user" value="products_user" />
+            <property name="javax.persistence.jdbc.password" value="password"/>
+            <property name="datanucleus.schema.autoCreateAll" value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>

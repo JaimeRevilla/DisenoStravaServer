@@ -3,8 +3,11 @@ package es.deusto.ingenieria.sd.strava.server.data.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Entity;
+
 import es.deusto.ingenieria.sd.strava.server.data.dto.TipoProveedor;
 
+@Entity
 public class Usuario {	
 	private String nombre;
 	private String contr;

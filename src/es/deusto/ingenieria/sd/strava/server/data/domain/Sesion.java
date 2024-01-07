@@ -1,5 +1,8 @@
 package es.deusto.ingenieria.sd.strava.server.data.domain;
 
+import javax.persistence.Entity;
+
+@Entity
 public class Sesion {
 	private String titulo;
 	private String deporte;
