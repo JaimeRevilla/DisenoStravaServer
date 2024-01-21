@@ -9,6 +9,12 @@
 	<property name="rmiregistry.IP" value="127.0.0.1"/> 
 	<property name="rmiregistry.port" value="1099"/> 
 	<property name="server.name" value="eAuctions"/>
+	
+	<?fefefe?>
+	<property environment="env"/>
+	<property name="server.IP" value="127.0.0.1"/>
+	<property name="server.port" value="8001"/>
+	<property name="message" value="is there anybody out there?"/>
 
 	<path id="classpath">
         <fileset dir="${lib.dir}">
@@ -29,6 +35,27 @@
 		<jar destfile="${dist.dir}/${export.file}" basedir="${bin.dir}" includes="**/remote/I**.class, **/dto/**.class"/>
 	</target>
 	
+	<?fefefe?>
+	<target name="6.enhance-classes" depends="1.build" description="Adds JPA code to the persisten compiled classes">
+	    	<taskdef name="enhancer" classpathref="classpath" classname="org.datanucleus.enhancer.EnhancerTask"/>
+	   		<enhancer classpathref="classpath" persistenceUnit="Tutorial" api="JPA" failonerror="true">
+	            <sysproperty key="log4j.configuration" value="file:${resources.dir}/log4j.properties"/>
+	            <fileset dir="${bin.dir}">
+	                <include name="**/*.class"/>
+	            </fileset>
+	   		</enhancer>
+	</target>
+	<?fefefe?>
+	<target name="3.create-db-schema" depends="6.enhance-classes" description="Creates DB Schema on the DB Server">
+	        <taskdef name="schematool" classpathref="classpath" classname="org.datanucleus.store.schema.SchemaToolTask"/>
+	    	<schematool classpathref="classpath" persistenceUnit="Tutorial" mode="create" api="JPA" failonerror="true">
+	            <sysproperty key="log4j.configuration" value="file:${resources.dir}/log4j.properties"/>
+	            <fileset dir="${bin.dir}">
+	                <include name="**/*.class"/>
+	            </fileset>
+	        </schematool>
+	    </target>
+	
 	<target name="3.local.test" depends="1.build" description="Runs local repository test">
 		<java classname="es.deusto.ingenieria.sd.strava.server.test.LocalTest" classpathref="classpath" fork="true">
 		</java>
@@ -43,4 +70,21 @@
 			<arg value="${server.name}"/> 
         </java>
     </target>
+	
+	<?fefefe?>
+	<target name="4.run-example" description="Runs the example">
+        <java classname="org.datanucleus.samples.jpa.tutorial.Main" classpathref="classpath" fork="true">
+        	<jvmarg value="-Dlog4j.configuration=log4j.properties"/>
+		</java>
+    </target>
+	
+	<target name="5.delete-db-schema" depends="6.enhance-classes" description="Drops DB sechema from the DB Server">
+		<taskdef name="schematool" classpathref="classpath" classname="org.datanucleus.store.schema.SchemaToolTask"/>
+		<schematool classpathref="classpath" persistenceUnit="Tutorial" mode="delete" api="JPA" failonerror="true">            
+    	   	<sysproperty key="log4j.configuration" value="file:${resources.dir}/log4j.properties"/>
+    	 	<fileset dir="${bin.dir}">
+           		<include name="**/*.class"/>
+            </fileset>
+        </schematool>
+	</target>
 </project>
