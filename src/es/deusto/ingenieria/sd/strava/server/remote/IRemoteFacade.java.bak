@@ -7,10 +7,7 @@ import java.util.List;
 
 import es.deusto.ingenieria.sd.strava.server.data.domain.Reto;
 import es.deusto.ingenieria.sd.strava.server.data.domain.Sesion;
-import es.deusto.ingenieria.sd.strava.server.data.dto.RetoDTO;
-import es.deusto.ingenieria.sd.strava.server.data.dto.SesionDTO;
 import es.deusto.ingenieria.sd.strava.server.data.dto.TipoProveedor;
-import es.deusto.ingenieria.sd.strava.server.data.dto.UsuarioDTO;
 
 //This interface defines the API of the Server. It represents the Remote Facade pattern
 public interface IRemoteFacade extends Remote {	
@@ -19,23 +16,26 @@ public interface IRemoteFacade extends Remote {
 	
 	public void logout(long token) throws RemoteException; 
 	
-	public void signup(UsuarioDTO usuariodto) throws RemoteException;
+	public void signup(String nombre, String contr, String mail, String fNac, 
+            double peso, int altura, double fCardiacaMaxima, double fCardiacaReposo, String log,TipoProveedor tipoProvedor) throws RemoteException;
 
 	public List<String> getDeporte() throws RemoteException;
 
     public List<String> getDeporteRet() throws RemoteException;
 
-    public List<String> getReto(long token) throws RemoteException;
+    public List<String> getReto() throws RemoteException;
     
-    public List<String> getSesion(long token) throws RemoteException;
+    public List<String> getSesion() throws RemoteException;
 
-    public List<String> getRetoActivado(long token) throws RemoteException;
+    public List<String> getRetoActivado() throws RemoteException;
 
-    public void makeSesion(SesionDTO dto, long token) throws RemoteException;
+    public void makeSesion(String titulo, String deporte, double km, String fInicio, 
+            int hora, double duracion) throws RemoteException;
 
-    public void makeReto(RetoDTO retodto, long token) throws RemoteException;
+    public void makeReto(String nombre, String fInicio, String fFin, 
+            double distancia, double objetivo, String deporte) throws RemoteException;
 
-    public void activateReto(String nombre, long token) throws RemoteException;
+    public void activateReto(String nombre) throws RemoteException;
     
     
 //	public List<CategoryDTO> getCategories() throws RemoteException;

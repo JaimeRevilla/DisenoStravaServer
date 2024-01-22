@@ -3,7 +3,9 @@ package es.deusto.ingenieria.sd.strava.server.data.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 
 import es.deusto.ingenieria.sd.strava.server.data.dto.TipoProveedor;
 
@@ -19,8 +21,12 @@ public class Usuario {
 	private double fCardiacaReposo;
 	private String log;
 	private TipoProveedor tipoProveedor;
-	private List<Reto> retos = new ArrayList<>();
 	private List<Reto> retosAct = new ArrayList<>();
+
+	@OneToMany(cascade=CascadeType.ALL)
+	private List<Reto> retos = new ArrayList<>();
+
+	@OneToMany(cascade=CascadeType.ALL)
 	private List<Sesion> sesiones = new ArrayList<>();
 	
 	

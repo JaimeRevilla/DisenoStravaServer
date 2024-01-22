@@ -21,25 +21,8 @@ public class UsuarioDTO implements Serializable {
 	private double fCardiacaMaxima;
 	private double fCardiacaReposo;
 	private int estadp;
-	private String log;
-	private TipoProveedor tipoProveedor;
 	private List<Reto> retos = new ArrayList<>();
 	private List<Sesion> sesiones = new ArrayList<>();
-	
-	public String getLog() {
-		return log;
-	}
-	public void setLog(String log) {
-		this.log = log;
-	}
-	public TipoProveedor getTipoProveedor() {
-		return tipoProveedor;
-	}
-	public void setTipoProveedor(TipoProveedor tipoProveedor) {
-		this.tipoProveedor = tipoProveedor;
-	}
-
-	
 	public String getNombre() {
 		return nombre;
 	}
