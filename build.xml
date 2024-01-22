@@ -38,7 +38,7 @@
 	<?fefefe?>
 	<target name="6.enhance-classes" depends="1.build" description="Adds JPA code to the persisten compiled classes">
 	    	<taskdef name="enhancer" classpathref="classpath" classname="org.datanucleus.enhancer.EnhancerTask"/>
-	   		<enhancer classpathref="classpath" persistenceUnit="Tutorial" api="JPA" failonerror="true">
+	   		<enhancer classpathref="classpath" persistenceUnit="Persistencia" api="JPA" failonerror="true">
 	            <sysproperty key="log4j.configuration" value="file:${resources.dir}/log4j.properties"/>
 	            <fileset dir="${bin.dir}">
 	                <include name="**/*.class"/>
@@ -48,7 +48,7 @@
 	<?fefefe?>
 	<target name="3.create-db-schema" depends="6.enhance-classes" description="Creates DB Schema on the DB Server">
 	        <taskdef name="schematool" classpathref="classpath" classname="org.datanucleus.store.schema.SchemaToolTask"/>
-	    	<schematool classpathref="classpath" persistenceUnit="Tutorial" mode="create" api="JPA" failonerror="true">
+	    	<schematool classpathref="classpath" persistenceUnit="Persistencia" mode="create" api="JPA" failonerror="true">
 	            <sysproperty key="log4j.configuration" value="file:${resources.dir}/log4j.properties"/>
 	            <fileset dir="${bin.dir}">
 	                <include name="**/*.class"/>
